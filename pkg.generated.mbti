@@ -1,0 +1,243 @@
+// Generated using `moon info`, DON'T EDIT IT
+package "CCllff-jpg/moondicom"
+
+import {
+  "moonbitlang/core/debug",
+}
+
+// Values
+pub fn accession_number() -> Tag
+
+pub fn anonymization_policy() -> AnonymizationPolicy
+
+pub fn anonymize(DataSet, AnonymizationPolicy) -> AnonymizationResult
+
+pub fn bits_allocated() -> Tag
+
+pub fn bits_stored() -> Tag
+
+pub fn byte_reader(Bytes) -> ByteReader
+
+pub fn columns() -> Tag
+
+pub fn data_element(Tag, ValueRepresentation, Value) -> DataElement
+
+pub fn data_set() -> DataSet
+
+pub fn dataset_to_json(DataSet) -> Json
+
+pub fn default_anonymization_policy() -> AnonymizationPolicy
+
+pub fn dictionary_vr(Tag) -> String
+
+pub fn file_meta_group_length() -> Tag
+
+pub fn file_meta_information_version() -> Tag
+
+pub fn high_bit() -> Tag
+
+pub fn implementation_class_uid() -> Tag
+
+pub fn implementation_version_name() -> Tag
+
+pub fn institution_name() -> Tag
+
+pub fn media_storage_sop_class_uid() -> Tag
+
+pub fn media_storage_sop_instance_uid() -> Tag
+
+pub fn modality() -> Tag
+
+pub fn parse(Bytes) -> DataSet raise ParseError
+
+pub fn patient_birth_date() -> Tag
+
+pub fn patient_id() -> Tag
+
+pub fn patient_name() -> Tag
+
+pub fn patient_sex() -> Tag
+
+pub fn pixel_data() -> Tag
+
+pub fn pixel_representation() -> Tag
+
+pub fn pixel_spacing() -> Tag
+
+pub fn referring_physician_name() -> Tag
+
+pub fn rows() -> Tag
+
+pub fn samples_per_pixel() -> Tag
+
+pub fn series_description() -> Tag
+
+pub fn series_instance_uid() -> Tag
+
+pub fn sop_class_uid() -> Tag
+
+pub fn sop_instance_uid() -> Tag
+
+pub fn specific_character_set() -> Tag
+
+pub fn study_date() -> Tag
+
+pub fn study_description() -> Tag
+
+pub fn study_instance_uid() -> Tag
+
+pub fn study_time() -> Tag
+
+pub fn tag(Int, Int) -> Tag
+
+pub fn tag_name(Tag) -> String
+
+pub fn transfer_syntax_uid() -> Tag
+
+pub fn validate(DataSet) -> ValidationReport
+
+pub fn value_representation(String, offset~ : Int) -> ValueRepresentation raise ParseError
+
+// Errors
+pub(all) suberror ParseError {
+  InvalidMagic(offset~ : Int)
+  Truncated(offset~ : Int, needed~ : Int, remaining~ : Int)
+  InvalidVr(offset~ : Int, code~ : String)
+  InvalidLength(offset~ : Int, length~ : Int)
+  Unsupported(offset~ : Int, message~ : String)
+}
+
+// Types and methods
+pub(all) enum AnonymizationAction {
+  Removed
+  Replaced
+} derive(Eq, @debug.Debug)
+
+pub(all) struct AnonymizationAudit {
+  tag : Tag
+  action : AnonymizationAction
+} derive(Eq, @debug.Debug)
+pub fn AnonymizationAudit::action(Self) -> AnonymizationAction
+pub fn AnonymizationAudit::tag(Self) -> Tag
+
+pub(all) struct AnonymizationPolicy {
+  remove : Array[Tag]
+  replacements : Array[(Tag, String)]
+  remove_private : Bool
+} derive(Eq, @debug.Debug)
+pub fn AnonymizationPolicy::with_private_removal(Self) -> Self
+pub fn AnonymizationPolicy::with_remove(Self, Tag) -> Self
+pub fn AnonymizationPolicy::with_replacement(Self, Tag, String) -> Self
+
+pub(all) struct AnonymizationResult {
+  dataset : DataSet
+  audit : Array[AnonymizationAudit]
+} derive(Eq, @debug.Debug)
+pub fn AnonymizationResult::audit(Self) -> Array[AnonymizationAudit]
+pub fn AnonymizationResult::dataset(Self) -> DataSet
+
+pub struct ByteReader {
+  bytes : Bytes
+  mut position : Int
+}
+pub fn ByteReader::position(Self) -> Int
+pub fn ByteReader::remaining(Self) -> Int
+
+pub(all) struct DataElement {
+  tag : Tag
+  vr : ValueRepresentation
+  value : Value
+} derive(Eq, @debug.Debug)
+
+pub(all) struct DataSet {
+  elements : Array[DataElement]
+} derive(Eq, @debug.Debug)
+pub fn DataSet::elements(Self) -> Array[DataElement]
+pub fn DataSet::get(Self, Tag) -> DataElement?
+pub fn DataSet::get_bytes(Self, Tag) -> Bytes?
+pub fn DataSet::get_int(Self, Tag) -> Int?
+pub fn DataSet::get_text(Self, Tag) -> String?
+pub fn DataSet::length(Self) -> Int
+pub fn DataSet::remove(Self, Tag) -> Bool
+pub fn DataSet::set(Self, DataElement) -> Unit
+
+pub(all) struct Tag {
+  group : Int
+  element : Int
+} derive(Eq, @debug.Debug)
+pub fn Tag::is_private(Self) -> Bool
+pub fn Tag::to_string(Self) -> String
+
+pub(all) struct ValidationIssue {
+  severity : ValidationSeverity
+  code : String
+  tag : Tag?
+  message : String
+} derive(Eq, @debug.Debug)
+pub fn ValidationIssue::code(Self) -> String
+pub fn ValidationIssue::message(Self) -> String
+pub fn ValidationIssue::severity(Self) -> ValidationSeverity
+pub fn ValidationIssue::tag(Self) -> Tag?
+
+pub(all) struct ValidationReport {
+  issues : Array[ValidationIssue]
+} derive(Eq, @debug.Debug)
+pub fn ValidationReport::error_count(Self) -> Int
+pub fn ValidationReport::issues(Self) -> Array[ValidationIssue]
+pub fn ValidationReport::warning_count(Self) -> Int
+
+pub(all) enum ValidationSeverity {
+  Error
+  Warning
+} derive(Eq, @debug.Debug)
+
+pub(all) enum Value {
+  Text(String)
+  Integer(Int)
+  Bytes(Bytes)
+} derive(Eq, @debug.Debug)
+
+pub(all) enum ValueRepresentation {
+  AE
+  AS
+  AT
+  CS
+  DA
+  DS
+  DT
+  FD
+  FL
+  IS
+  LO
+  LT
+  OB
+  OD
+  OF
+  OL
+  OV
+  OW
+  PN
+  SH
+  SL
+  SQ
+  SS
+  ST
+  SV
+  TM
+  UC
+  UI
+  UL
+  UN
+  UR
+  US
+  UT
+  UV
+} derive(Eq, @debug.Debug)
+pub fn ValueRepresentation::is_text(Self) -> Bool
+pub fn ValueRepresentation::to_string(Self) -> String
+pub fn ValueRepresentation::uses_long_header(Self) -> Bool
+
+// Type aliases
+
+// Traits
+
