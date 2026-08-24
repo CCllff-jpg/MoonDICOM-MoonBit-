@@ -240,4 +240,3 @@ pub fn ValueRepresentation::uses_long_header(Self) -> Bool
 // Type aliases
 
 // Traits
-
