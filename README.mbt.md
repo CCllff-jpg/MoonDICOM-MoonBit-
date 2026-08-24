@@ -4,7 +4,7 @@ MoonDICOM is a pure MoonBit toolkit for reading DICOM Part 10 metadata safely an
 
 Author: CCllff-jpg <347921583@qq.com>
 
-Repository: to be added after the remote repository is created.
+Repository: https://github.com/CCllff-jpg/MoonDICOM-MoonBit-.git
 
 ## Current status
 
@@ -48,10 +48,12 @@ Validation checks required identity metadata, UID and date syntax, image dimensi
 The native CLI can inspect and validate a real Part 10 file and export metadata as JSON:
 
 ```sh
-moon run cmd/main -- inspect sample.dcm
-moon run cmd/main -- validate sample.dcm
-moon run cmd/main -- convert sample.dcm --format json
-moon run cmd/main -- anonymize sample.dcm --output anonymized.json
+moon run --target native examples/generate
+moon run --target native examples/generate -- examples/sample.dcm
+moon run --target native cmd/main -- inspect examples/sample.dcm
+moon run --target native cmd/main -- validate examples/sample.dcm
+moon run --target native cmd/main -- convert examples/sample.dcm --format json
+moon run --target native cmd/main -- anonymize examples/sample.dcm --output anonymized.json
 ```
 
 The `anonymize` command writes an anonymized metadata JSON report and an audit count. It does not rewrite a binary `.dcm` file; a DICOM encoder is intentionally not claimed until it can preserve transfer syntax and unsupported data safely.
